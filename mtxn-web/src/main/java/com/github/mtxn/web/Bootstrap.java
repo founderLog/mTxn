@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @MapperScan({"com.gitee.sunchenbin.mybatis.actable.dao.*","com.github.mtxn.mapper","com.github.mtxn.web.mapper"})
-@ComponentScan(basePackages = {"com.gitee.sunchenbin.mybatis.actable.manager.*","com.github.mtxn"})
+@ComponentScan(basePackages = {"com.github.mtxn","com.gitee.sunchenbin.mybatis.actable.manager.*"})
 public class Bootstrap {
 
 	public static void main(String[] args) {

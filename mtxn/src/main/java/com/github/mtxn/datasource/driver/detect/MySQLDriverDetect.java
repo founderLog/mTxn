@@ -3,7 +3,7 @@ package com.github.mtxn.datasource.driver.detect;
 import com.github.mtxn.datasource.driver.DriverFactory;
 import com.github.mtxn.entity.DataSource;
 import com.github.mtxn.entity.enums.DataSourceType;
-import com.mysql.jdbc.Driver;
+import com.mysql.cj.jdbc.Driver;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
