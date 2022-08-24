@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 
 /**
- *  项目启动注册本身数据源到com_data_source
+ * 项目启动注册本身数据源到com_data_source
  */
 @Order(89)
 @Component

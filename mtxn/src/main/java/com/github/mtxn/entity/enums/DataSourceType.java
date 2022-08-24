@@ -26,10 +26,11 @@ public enum DataSourceType implements Enumerator {
     private final String value;
     private final String text;
 
-     DataSourceType(String value, String text) {
+    DataSourceType(String value, String text) {
         this.value = value;
         this.text = text;
     }
+
     @Override
     public String getValue() {
         return this.value;

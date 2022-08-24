@@ -8,7 +8,7 @@ public class DataSourceContextHolder {
     }
 
     public static String getKey() {
-        return (String)THREAD_LOCAL.get();
+        return (String) THREAD_LOCAL.get();
     }
 
     public static synchronized void setKey(String key) {

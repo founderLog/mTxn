@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DataSourceServiceImpl  implements DataSourceService {
+public class DataSourceServiceImpl implements DataSourceService {
     @Autowired
     private DataSourceMapper dataSourceMapper;
 
@@ -36,7 +36,7 @@ public class DataSourceServiceImpl  implements DataSourceService {
 
     @Override
     public DataSource getByName(String name) {
-        return dataSourceMapper.selectOne(Wrappers.<DataSource>lambdaQuery().eq(DataSource::getName,name));
+        return dataSourceMapper.selectOne(Wrappers.<DataSource>lambdaQuery().eq(DataSource::getName, name));
     }
 
 
@@ -65,18 +65,18 @@ public class DataSourceServiceImpl  implements DataSourceService {
 
     private void fillOtherDataSourceProps(DataSource source) {
         DataSourceUtils.check(source);
-        LambdaQueryWrapper<DataSource> queryWrapper =  Wrappers.<DataSource>lambdaQuery();
+        LambdaQueryWrapper<DataSource> queryWrapper = Wrappers.<DataSource>lambdaQuery();
         if (source.getId() == null) {
-            queryWrapper.eq(DataSource::getName,source.getName());
+            queryWrapper.eq(DataSource::getName, source.getName());
         } else {
-            queryWrapper.eq(DataSource::getName,source.getName()).eq(DataSource::getId,source.getId());
+            queryWrapper.eq(DataSource::getName, source.getName()).eq(DataSource::getId, source.getId());
         }
 
         boolean exists = dataSourceMapper.exists(queryWrapper);
         if (exists) {
             throw ExceptionUtils.mpe("数据源名称重复: " + source.getName(), new Object[0]);
         } else {
-            DataSource dbDataSource = (DataSource)this.dataSourceMapper.selectById(source.getId());
+            DataSource dbDataSource = (DataSource) this.dataSourceMapper.selectById(source.getId());
             if (dbDataSource != null) {
                 if (StringUtils.isBlank(source.getHost()) || source.getPort() == null) {
                     source.setHost(dbDataSource.getHost());

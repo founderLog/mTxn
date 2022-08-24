@@ -4,12 +4,12 @@ package com.github.mtxn.datasource;
 import com.github.mtxn.manager.DataSourceManager;
 import com.github.mtxn.transaction.MultiTransactionManager;
 import com.github.mtxn.transaction.context.DataSourceContextHolder;
-import com.github.mtxn.transaction.wrapper.ConnectionWrapper;
-import com.github.mtxn.transaction.context.TransactionHolder;
+import com.github.mtxn.transaction.support.ConnectionProxy;
+import com.github.mtxn.transaction.support.TransactionHolder;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.AbstractDataSource;
-import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentMap;
  * 动态数据源
  */
 @Slf4j
+@Primary
 public class DynamicDataSource extends AbstractDataSource implements DataSourceManager {
 
     private final ConcurrentMap<Integer, DataSource> dataSources;
@@ -45,15 +46,18 @@ public class DynamicDataSource extends AbstractDataSource implements DataSourceM
         if (Objects.isNull(transactionHolder)) {
             return determineTargetDataSource().getConnection();
         }
-        ConnectionWrapper connectionWrapper = transactionHolder.getConnectionMap()
+        ConnectionProxy connectionProxy = transactionHolder.getConnectionMap()
                 .get(transactionHolder.getExecuteStack().peek());
-        if (connectionWrapper == null) {
+        if (connectionProxy == null) {
             // 没开跨库事务，直接返回
             return determineTargetDataSource().getConnection();
         } else {
-            transactionHolder.addCount();
             // 开了跨库事务，从当前线程中拿包装过的Connection
-            return connectionWrapper;
+            if (connectionProxy.isClosed()) {
+                log.warn("get a closed connection,executeId:{},datasourceKey:{}",
+                        transactionHolder.getExecuteStack().peek(), transactionHolder.getDatasourceKeyStack().peek());
+            }
+            return connectionProxy;
         }
     }
 

@@ -1,4 +1,4 @@
-import com.github.mtxn.web.Bootstrap;
+import com.github.mtxn.Bootstrap;
 import com.github.mtxn.web.entity.Student;
 import com.github.mtxn.web.service.StuService;
 import lombok.extern.slf4j.Slf4j;

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class MySQLDriverDetect  implements DriverFactory {
+public class MySQLDriverDetect implements DriverFactory {
     @Override
     public boolean usable(DataSource dataSourceConfig) {
         if (StringUtils.isNotEmpty(dataSourceConfig.getJdbcUrl())) {

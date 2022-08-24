@@ -10,6 +10,11 @@ public enum DataSourceStatus implements Enumerator {
     private final String value;
     private final String text;
 
+    DataSourceStatus(String value, String text) {
+        this.value = value;
+        this.text = text;
+    }
+
     @Override
     public String getValue() {
         return this.value;
@@ -18,10 +23,5 @@ public enum DataSourceStatus implements Enumerator {
     @Override
     public String getText() {
         return this.text;
-    }
-
-     DataSourceStatus(String value, String text) {
-        this.value = value;
-        this.text = text;
     }
 }
