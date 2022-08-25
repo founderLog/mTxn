@@ -1,4 +1,4 @@
-## mTxn | Spring多数据源及事务解决方案
+## mTxn | SpringBoot多数据源及事务解决方案
 
 ![target](images/log.jpg)
 
