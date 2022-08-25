@@ -7,9 +7,12 @@ import com.github.mtxn.datasource.driver.DriverFactory;
 import com.github.mtxn.datasource.driver.DriverFactoryManager;
 import com.github.mtxn.entity.DataSource;
 import com.github.mtxn.entity.enums.DataSourceStatus;
+import com.github.mtxn.manager.DataSourceManager;
 import com.github.mtxn.mapper.DataSourceMapper;
 import com.github.mtxn.service.DataSourceService;
+import com.github.mtxn.task.DataSourceTask;
 import com.github.mtxn.utils.DataSourceUtils;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,12 +20,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class DataSourceServiceImpl implements DataSourceService {
-    @Autowired
-    private DataSourceMapper dataSourceMapper;
+    private final DataSourceMapper dataSourceMapper;
 
-    @Autowired
-    private DriverFactoryManager driverFactoryManager;
+    private final DriverFactoryManager driverFactoryManager;
+
+    private final DataSourceManager dataSourceManager;
+
+    private final DataSourceTask dataSourceTask;
 
     @Override
     public List<DataSource> getAll() {
@@ -45,12 +51,14 @@ public class DataSourceServiceImpl implements DataSourceService {
         // 补充其他数据源信息
         this.fillOtherDataSourceProps(dataSource);
         dataSourceMapper.insert(dataSource);
+        dataSourceTask.doLoad(dataSource);
         return dataSource.getId();
     }
 
     @Override
     public void update(DataSource dataSource) {
         dataSourceMapper.updateById(dataSource);
+        this.dataSourceManager.closeDataSource(dataSource.getId());
     }
 
     @Override

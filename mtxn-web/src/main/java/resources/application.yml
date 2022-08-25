@@ -1,6 +1,8 @@
 spring:
   application:
     name: mtxn-web
+  main:
+    allow-circular-references: true
   aop:
     proxy-target-class: true
     auto: true

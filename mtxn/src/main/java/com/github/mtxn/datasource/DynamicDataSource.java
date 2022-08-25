@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentMap;
 @Primary
 public class DynamicDataSource extends AbstractDataSource implements DataSourceManager {
 
-    private final ConcurrentMap<Integer, DataSource> dataSources;
+    private final ConcurrentMap<String, DataSource> dataSources;
 
     private DataSource defaultDataSource;
 
@@ -94,23 +94,23 @@ public class DynamicDataSource extends AbstractDataSource implements DataSourceM
     @Override
     public void put(Integer id, DataSource dataSource) {
         log.info("put DataSource: {}", id);
-        dataSources.put(id, dataSource);
+        dataSources.put(String.valueOf(id), dataSource);
     }
 
     @Override
     public DataSource get(Integer id) {
-        return dataSources.get(id);
+        return dataSources.get(String.valueOf(id));
     }
 
     @Override
     public Boolean hasDataSource(Integer id) {
-        return dataSources.containsKey(id);
+        return dataSources.containsKey(String.valueOf(id));
     }
 
     @Override
     public void remove(Integer id) {
         log.warn("remove DataSource: {}", id);
-        dataSources.remove(id);
+        dataSources.remove(String.valueOf(id));
     }
 
     @Override
@@ -120,7 +120,7 @@ public class DynamicDataSource extends AbstractDataSource implements DataSourceM
 
     @Override
     public void closeDataSource(Integer id) {
-        DataSource dataSource = dataSources.get(id);
+        DataSource dataSource = dataSources.get(String.valueOf(id));
         if (dataSource != null) {
             try {
                 if (dataSource instanceof HikariDataSource) {
@@ -130,6 +130,6 @@ public class DynamicDataSource extends AbstractDataSource implements DataSourceM
                 log.error("关闭数据源异常", exception);
             }
         }
-        dataSources.remove(id);
+        dataSources.remove(String.valueOf(id));
     }
 }

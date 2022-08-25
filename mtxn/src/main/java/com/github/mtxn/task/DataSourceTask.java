@@ -1,11 +1,12 @@
 package com.github.mtxn.task;
 
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.mtxn.cache.DataSourceCacheOperator;
 import com.github.mtxn.datasource.DynamicDataSourceBuilder;
 import com.github.mtxn.entity.DataSource;
 import com.github.mtxn.manager.DataSourceManager;
-import com.github.mtxn.service.DataSourceService;
+import com.github.mtxn.mapper.DataSourceMapper;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class DataSourceTask implements CommandLineRunner, DataSourceCacheOperato
     protected Cache<String, DataSource> dataSourceCache = CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(10)).build();
 
     @Autowired
-    private DataSourceService dataSourceService;
+    private DataSourceMapper dataSourceMapper;
 
     @Autowired
     private DataSourceManager dataSourceManager;
@@ -44,11 +45,11 @@ public class DataSourceTask implements CommandLineRunner, DataSourceCacheOperato
 
     @Scheduled(fixedRate = 1000 * 60 * 5)
     public void load() {
-        List<DataSource> dataSourceList = dataSourceService.getAll();
+        List<DataSource> dataSourceList = dataSourceMapper.selectList(Wrappers.query());
         dataSourceList.forEach(dataSource -> doLoad(dataSource));
     }
 
-    private void doLoad(DataSource dataSource) {
+    public void doLoad(DataSource dataSource) {
         if (null != dataSource) {
             setCacheData(dataSource.getId(), dataSource);
             if (dataSourceManager.get(dataSource.getId()) == null) {
@@ -65,7 +66,7 @@ public class DataSourceTask implements CommandLineRunner, DataSourceCacheOperato
     @Override
     public DataSource getCacheData(Integer id) {
         try {
-            DataSource dataSource = dataSourceCache.get(DataSource.NAME + ":" + id, () -> dataSourceService.getById(id));
+            DataSource dataSource = dataSourceCache.get(DataSource.NAME + ":" + id, () -> dataSourceMapper.selectById(id));
             doLoad(dataSource);
             return dataSource;
         } catch (ExecutionException e) {

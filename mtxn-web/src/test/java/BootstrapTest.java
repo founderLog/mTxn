@@ -1,6 +1,6 @@
 import com.github.mtxn.Bootstrap;
-import com.github.mtxn.web.entity.Student;
-import com.github.mtxn.web.service.StuService;
+import com.github.mtxn.web.entity.Order;
+import com.github.mtxn.web.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,12 +17,12 @@ import java.util.List;
 public class BootstrapTest {
 
     @Autowired
-    private StuService stuService;
+    private OrderService orderService;
 
     @Test
     public void testStudentService() {
-        List<Student> students = stuService.list();
-        Assert.assertTrue(students.size() > 0);
+        List<Order> orderList = orderService.list();
+        Assert.assertTrue(orderList.size() > 0);
     }
 
 

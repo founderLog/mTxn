@@ -27,14 +27,5 @@ create table  com_data_source
 )
     comment '是否禁用。0:未禁用，1:已禁用' collate = utf8mb4_bin;
 
--- auto-generated definition
-create table com_student
-(
-    id      int auto_increment
-        primary key,
-    name    varchar(200) null,
-    school  varchar(100) null,
-    city    varchar(100) null,
-    address varchar(500) null
-);
+
 
