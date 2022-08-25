@@ -1,4 +1,4 @@
-### mTxn | 多数据源事物演示项目
+### mTxn | 多数据源事务演示项目
 #### 一 测试场景
 模拟下单扣库存的场景，新增com_order和com_stock两张表。在主库mtxn下订单，在库存库mtxn2减库存。
 1. mtxn2中初始化库存表
@@ -59,7 +59,7 @@ OderService
         stockService.decreasingStock(STOCK_DATASOURCE_ID,1,STOCK_ID);
     }
 ```
-@MultiTransaction默认开启主库mtxn事物，接着执行减库存开启mtxn2的事物。
+@MultiTransaction默认开启主库mtxn事务，接着执行减库存开启mtxn2的事务。
 
 StockService
 ```java 
@@ -74,9 +74,9 @@ StockService
 第一个参数datasourceId又下订单方法传过来，指定为库存所在数据源id。
 `stockService.decreasingStock(STOCK_DATASOURCE_ID,1,STOCK_ID);`
 
-下单之后，库存减一，接着来验证事物的完整性。
+下单之后，库存减一，接着来验证事务的完整性。
 
-### 二 验证事物完整性
+### 二 验证事务完整性
 1. 下单：http://localhost:8080/order/makeOrder
 查看订单和库存表是否正常入库
 2. 增加异常代码
@@ -92,7 +92,7 @@ StockService
 执行减库存后抛出异常，查看两条数据是否都已经回滚。
 
 ### 三 使用总结
-@MultiTransaction相当于是@Transactional，用于开始一个事物。如果不指定datasourceId，则默认是操作主数据源（yml中配置的datasourceId）。
+@MultiTransaction相当于是@Transactional，用于开始一个事务。如果不指定datasourceId，则默认是操作主数据源（yml中配置的datasourceId）。
 
 @MultiTransaction(datasourceId = "xxx")，则是切换到datasourceId所在的数据源。另外MultiTransaction支持任意嵌套调用：
 ```

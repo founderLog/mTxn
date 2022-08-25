@@ -28,7 +28,7 @@ public class OrderService {
 
     /**
      * 下单，减库存
-     * 这里开启了跨库事物，接着stockService会开启新的事物
+     * 这里开启了跨库事务，接着stockService会开启新的事务
      * @param order
      */
     @MultiTransaction
