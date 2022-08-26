@@ -15,7 +15,8 @@ import java.util.List;
 public class StockService {
     private final StockMapper stockMapper;
 
-    public List<Stock> list() {
+    @MultiTransaction(datasourceId = "#dataSourceId")
+    public List<Stock> list(Integer dataSourceId) {
         return stockMapper.selectList(Wrappers.query());
     }
 

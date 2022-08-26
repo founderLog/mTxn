@@ -3,6 +3,7 @@ package com.github.mtxn.transaction.support;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Deque;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,9 +24,9 @@ public class TransactionHolder {
     // 维护当前线程事务ID和连接关系
     private ConcurrentHashMap<String, ConnectionProxy> connectionMap;
     // 事务执行栈
-    private Stack<String> executeStack;
+    private Deque<String> executeStack;
     // 数据源切换栈
-    private Stack<String> datasourceKeyStack;
+    private Deque<String> datasourceKeyStack;
     // 主事务ID
     private String mainTransactionId;
     // 执行次数
