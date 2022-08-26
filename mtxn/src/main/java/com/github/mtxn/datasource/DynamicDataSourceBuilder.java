@@ -24,9 +24,11 @@ public class DynamicDataSourceBuilder implements BeanClassLoaderAware {
 
     private static final int MIN_IDLE = 1;
     private static final int INITIAL_SIZE = 8;
-    private static final int MAX_POOLSIZE = 8;
+    private static final int MAX_POOL_SIZE = 8;
     private static final long CONNECTION_TIMEOUT = 30000L;
     private static ClassLoader classLoader;
+
+    private static final String CLOSE_ERROR = "数据库链接关闭失败:{}";
 
 
     private DynamicDataSourceBuilder() {
@@ -47,7 +49,7 @@ public class DynamicDataSourceBuilder implements BeanClassLoaderAware {
         // 最小连接池
         ds.setMinimumIdle(config.getMinIdle() != null ? config.getMinIdle() : MIN_IDLE);
         // 最大连接池
-        ds.setMaximumPoolSize(config.getMaxPoolSize() != null ? config.getMaxPoolSize() : MAX_POOLSIZE);
+        ds.setMaximumPoolSize(config.getMaxPoolSize() != null ? config.getMaxPoolSize() : MAX_POOL_SIZE);
         return ds;
     }
 
@@ -64,14 +66,14 @@ public class DynamicDataSourceBuilder implements BeanClassLoaderAware {
         // 最小连接池
         ds.setMinIdle(config.getMinIdle() != null ? config.getMinIdle() : MIN_IDLE);
         // 最大连接池
-        ds.setMaxActive(config.getMaxPoolSize() != null ? config.getMaxPoolSize() : MAX_POOLSIZE);
+        ds.setMaxActive(config.getMaxPoolSize() != null ? config.getMaxPoolSize() : MAX_POOL_SIZE);
         ds.setMaxWait(CONNECTION_TIMEOUT);
         ds.setName(config.getName());
         try {
             ds.setFilters("stat");
             ds.setConnectionProperties("druid.stat.slowSqlMillis=1000");
         } catch (SQLException e) {
-            log.error("创建数据源失败", e);
+            log.error(CLOSE_ERROR, e);
         }
         return ds;
     }
@@ -89,9 +91,10 @@ public class DynamicDataSourceBuilder implements BeanClassLoaderAware {
                 return createDruidDataSource(config);
             case "com.zaxxer.hikari.HikariDataSource":
                 return createHikariDataSource(config);
+            default:
+                return null;
 
         }
-        return null;
     }
 
     public static boolean testConnection(DataSourceConfig config, javax.sql.DataSource dataSource) {
@@ -149,7 +152,7 @@ public class DynamicDataSourceBuilder implements BeanClassLoaderAware {
                     resultSet.close();
                 } catch (SQLException e) {
                     if (log.isWarnEnabled()) {
-                        log.warn("数据库链接关闭失败:{}", e.getMessage());
+                        log.warn(CLOSE_ERROR, e.getMessage());
                     }
                 }
                 resultSet = null;
@@ -159,7 +162,7 @@ public class DynamicDataSourceBuilder implements BeanClassLoaderAware {
                     statement.close();
                 } catch (SQLException e) {
                     if (log.isWarnEnabled()) {
-                        log.warn("数据库链接关闭失败:{}", e.getMessage());
+                        log.warn(CLOSE_ERROR, e.getMessage());
                     }
                 }
                 statement = null;
@@ -169,7 +172,7 @@ public class DynamicDataSourceBuilder implements BeanClassLoaderAware {
                     connection.close();
                 } catch (SQLException e) {
                     if (log.isWarnEnabled()) {
-                        log.warn("数据库链接关闭失败:{}", e.getMessage());
+                        log.warn(CLOSE_ERROR, e.getMessage());
                     }
                 }
                 connection = null;

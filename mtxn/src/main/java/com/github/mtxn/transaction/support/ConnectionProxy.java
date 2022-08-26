@@ -32,10 +32,13 @@ public class ConnectionProxy implements Connection {
         this.connection = connection;
     }
 
+    /**
+     * 屏蔽底层事务的提交
+     * @throws SQLException
+     */
 
     @Override
     public void commit() throws SQLException {
-        // connection.commit();
     }
 
     /**
@@ -48,9 +51,12 @@ public class ConnectionProxy implements Connection {
     }
 
 
+    /**
+     *  屏蔽底层连接的关闭
+     * @throws SQLException
+     */
     @Override
     public void close() throws SQLException {
-        //connection.close();
     }
 
     /**

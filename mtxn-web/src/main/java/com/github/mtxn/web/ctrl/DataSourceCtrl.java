@@ -1,9 +1,12 @@
 package com.github.mtxn.web.ctrl;
 
 import com.github.mtxn.entity.DataSource;
+import com.github.mtxn.entity.enums.DataSourceStatus;
 import com.github.mtxn.service.DataSourceService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,15 +31,14 @@ public class DataSourceCtrl {
     @GetMapping("/list")
     @ResponseBody
     public List<DataSource> list() {
-        List<DataSource> dataSourceList = dataSourceService.getAll();
-        return dataSourceList;
+        return dataSourceService.getAll();
     }
 
     /**
      * 新增一个新数据源，仅仅是为了测试
      * 这里数据源id指定为10001，在实际的应用种会把数据源id跟业务绑定
      *
-     * @return
+     * @return DataSource
      */
     @GetMapping("/add")
     @ResponseBody
@@ -47,4 +49,41 @@ public class DataSourceCtrl {
         dataSourceService.insert(dataSource);
         return dataSource;
     }
+
+    @GetMapping("/getById")
+    @ResponseBody
+    public DataSource getById(Integer id) {
+        return dataSourceService.getById(id);
+    }
+
+    @GetMapping("/getByName")
+    @ResponseBody
+    public DataSource getByName(String name) {
+        return dataSourceService.getByName(name);
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public void update(@RequestBody DataSource dataSource) {
+        dataSourceService.update(dataSource);
+    }
+
+    @PostMapping("/new")
+    @ResponseBody
+    public void insert(@RequestBody DataSource dataSource) {
+        dataSourceService.insert(dataSource);
+    }
+
+    @GetMapping("/deleteById")
+    @ResponseBody
+    public int deleteById(String id) {
+        return dataSourceService.deleteById(id);
+    }
+
+    @GetMapping("/modify")
+    @ResponseBody
+    public void modifyStatus(Integer id, DataSourceStatus status) {
+        dataSourceService.modifyStatus(id, status);
+    }
+
 }

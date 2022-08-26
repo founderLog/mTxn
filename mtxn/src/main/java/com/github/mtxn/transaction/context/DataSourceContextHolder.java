@@ -1,14 +1,14 @@
 package com.github.mtxn.transaction.context;
 
 public class DataSourceContextHolder {
-    private static final ThreadLocal<String> THREAD_LOCAL = new ThreadLocal();
+    private static final ThreadLocal<String> THREAD_LOCAL = new ThreadLocal<String>();
 
     private DataSourceContextHolder() {
         throw new IllegalStateException("Utils");
     }
 
     public static String getKey() {
-        return (String) THREAD_LOCAL.get();
+        return THREAD_LOCAL.get();
     }
 
     public static synchronized void setKey(String key) {
