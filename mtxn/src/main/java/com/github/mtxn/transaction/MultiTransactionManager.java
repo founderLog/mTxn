@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Stack;
@@ -109,7 +110,11 @@ public class MultiTransactionManager extends AbstractTransactionManager implemen
             return;
         }
         // 获取当前数据源
-        Connection connection = this.dataSource.getConnection();
+        Connection connection;
+        // 使用try resource，避免sonarLint检测报错
+        try (ConnectionProxy connectionProxy = new ConnectionProxy(this.dataSource.getConnection())) {
+            connection = connectionProxy.getConnection();
+        }
         // 设置事务隔离级别
         if (transactionHolder.getIsolationLevel() != IsolationLevel.DEFAULT) {
             connection.setTransactionIsolation(transactionHolder.getIsolationLevel().getValue());
@@ -240,8 +245,8 @@ public class MultiTransactionManager extends AbstractTransactionManager implemen
         if (Objects.isNull(transactionHolder)) {
             transactionHolder = TransactionHolder.builder().
                     mainTransactionId(transId).
-                    executeStack(new Stack<>()).
-                    datasourceKeyStack(new Stack<>()).
+                    executeStack(new LinkedList<>()).
+                    datasourceKeyStack(new LinkedList<>()).
                     isOpen(Boolean.TRUE).
                     readOnly(readOnly).
                     isolationLevel(isolationLevel).

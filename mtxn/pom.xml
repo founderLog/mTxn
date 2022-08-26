@@ -73,8 +73,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.6.3</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
