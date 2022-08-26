@@ -24,6 +24,8 @@ public class SelfDataSourceStartup implements CommandLineRunner {
     private final DataSourceProperties dataSourceProperties;
     private final DataSourceService dataSourceService;
 
+    private static final String DATA_SOURCE_PREFIX = "self_";
+
 
     public void run(String... args) {
         try {
@@ -70,11 +72,11 @@ public class SelfDataSourceStartup implements CommandLineRunner {
         if (StringUtils.startsWith(url, "jdbc:mysql://")) {
             url = StringUtils.substringBefore(url, "?");
             url = StringUtils.substringAfterLast(url, "/");
-            return "self_" + url;
+            return DATA_SOURCE_PREFIX + url;
         } else if (StringUtils.startsWith(url, "jdbc:oracle")) {
-            return "self_" + StringUtils.substringAfterLast(url, "/");
+            return DATA_SOURCE_PREFIX + StringUtils.substringAfterLast(url, "/");
         } else {
-            return StringUtils.startsWith(url, "jdbc:dm://") ? "self_" + StringUtils.substringAfterLast(url, "/") : "self";
+            return StringUtils.startsWith(url, "jdbc:dm://") ? DATA_SOURCE_PREFIX + StringUtils.substringAfterLast(url, "/") : "self";
         }
     }
 

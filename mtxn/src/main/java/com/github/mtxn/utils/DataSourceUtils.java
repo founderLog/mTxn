@@ -6,6 +6,10 @@ import com.github.mtxn.entity.enums.DataSourceStatus;
 import org.apache.commons.lang3.StringUtils;
 
 public class DataSourceUtils {
+    private DataSourceUtils(){
+
+    }
+
     public static void check(DataSource source) {
         if (source == null) {
             throw ExceptionUtils.mpe("数据源不能为空", new Object[0]);

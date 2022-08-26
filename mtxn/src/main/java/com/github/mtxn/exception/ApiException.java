@@ -30,6 +30,7 @@ public class ApiException extends RuntimeException {
         this.code = code;
     }
 
+    @Override
     public String toString() {
         return "ApiException(code=" + this.getCode() + ")";
     }
