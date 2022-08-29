@@ -29,4 +29,16 @@ public @interface MultiTransaction {
     // 只读事务，若有更新操作会抛出异常
     boolean readOnly() default false;
 
+    int timeout() default -1;
+
+    String timeoutString() default "";
+
+    Class<? extends Throwable>[] rollbackFor() default {};
+
+    String[] rollbackForClassName() default {};
+
+    Class<? extends Throwable>[] noRollbackFor() default {};
+
+    String[] noRollbackForClassName() default {};
+
 }
