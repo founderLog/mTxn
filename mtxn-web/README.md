@@ -94,7 +94,7 @@ StockService
 ### 三 使用总结
 @MultiTransaction相当于是@Transactional，用于开始一个事务。如果不指定datasourceId，则默认是操作主数据源（yml中配置的datasourceId）。
 
-@MultiTransaction(datasourceId = "xxx")，则是切换到datasourceId所在的数据源。另外MultiTransaction支持任意嵌套调用：
+@MultiTransaction(datasourceId = "xxx")，切换到datasourceId所在的数据源。另外MultiTransaction支持任意嵌套调用：
 ```
 @MultiTransaction -> @MultiTransaction(datasourceId = "xxx") -> (datasourceId = "yyy")...
 ```
