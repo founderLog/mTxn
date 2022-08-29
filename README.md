@@ -2,7 +2,7 @@
 #### 动态数据源管理
 
 * 通过配置文件
-* 
+
 典型的SpringBoot多数据源配置如下所示：
 ```yaml
 spring:
@@ -147,7 +147,7 @@ Service1在调用Service2的方法之前，把Service2需要操作的数据源ID
 
 >由于数据源是在表：com_data_source中维护的，因此业务上一般要维护id和业务上的关联。通过业务id，能过直接找到datasourceId。
 * 事务如何保证
-* 
+
 @MultiTransaction其实包含两层：
 1. 切换数据源
 2. 同时保证事务的统一提交和回滚
